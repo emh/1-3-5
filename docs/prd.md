@@ -306,7 +306,16 @@ Do not introduce:
 - forms
 - reorder controls
 
-The source of truth should remain simple text.
+Keep exercise names as simple text. Store mute and boost preferences separately, keyed by normalized exercise name.
+
+### Rotation controls (September 23, 2026)
+
+- Highlight one or more complete exercise names to reveal **Mute** and **Boost 2×** above the keyboard. A cursor or partial exercise selection keeps these buttons hidden; **Done** remains available. Every exercise touched by a selection must be fully highlighted, including all words of multiword names. Surrounding whitespace is optional.
+- Muted lines appear struck through and do not enter new snacks or rerolls. **Unmute** returns them to rotation.
+- Boosted lines appear bold and receive weight 2 rather than the normal weight 1. **Unboost** restores normal weight. Muting takes precedence and retains the boost for later.
+- A mixed selection applies the chosen setting to every selected exercise. If all selected exercises already have it, the action removes it.
+- Blank lines have no controls. Preferences save automatically, survive a single-line rename, and travel with matching names when reordered. Duplicate names share preferences.
+- Import/export includes these preferences. Reset clears them.
 
 ---
 
@@ -340,6 +349,10 @@ Suggested format:
     "dead hang",
     "bird dog"
   ],
+  "exercisePreferences": {
+    "pushups": {"isMuted": false, "isBoosted": true},
+    "dead hang": {"isMuted": true, "isBoosted": false}
+  },
   "snacks": [
     {
       "id": "UUID",
@@ -395,10 +408,11 @@ struct Snack: Identifiable, Codable {
 }
 ```
 
-Library can be persisted as raw text:
+Library names are persisted as raw text, with the two rotation preferences stored separately:
 
 ```swift
 var libraryText: String
+var exercisePreferences: [String: ExercisePreferences]
 ```
 
 Parse into exercises only when needed:
@@ -425,18 +439,18 @@ When generating a snack:
 
 1. parse valid exercises
 2. deduplicate
-3. shuffle
-4. take the requested count
+3. exclude muted exercises
+4. draw the requested count without replacement, with weight 2 for boosted exercises and weight 1 otherwise
 
 For individual reroll:
 
 1. exclude all exercises currently visible
-2. select randomly from remaining library exercises
+2. exclude muted exercises and use the same weights to select from the remaining library exercises
 3. replace only the selected row
 
 Avoid immediately returning the same exercise being rerolled.
 
-No weighting or recommendation logic is required.
+Only the explicit Boost setting affects weight. No recommendation logic is required.
 
 ---
 
@@ -502,31 +516,37 @@ Haptics:
 
 ## Default Exercise Library
 
-Ship with a modest starter set so the app works immediately.
-
-Example:
+Ship with these 28 exercises in this order (updated September 23, 2026):
 
 ```text
 pushups
 air squats
-deep squat
-dead hang
+split squats
 cossack squats
-hollow hold
-kettlebell swings
-bird dog
-hip airplanes
-ATG split squat
-lunges
-calf raises
+situps
 plank
 side plank
-mountain climbers
-burpees
-shoulder taps
-glute bridge
-wall sit
-reverse lunges
+dead hang
+rope flow
+indian club circles
+steel club mills
+kb swings
+kb goblet squats
+kb snatches
+kb clean & presses
+kb around the worlds
+kb halos
+rolling getups
+underswitches
+jump rope
+kick throughs
+horse stance
+iso lunge
+iso calf raise
+deep squat
+kb rows
+glute bridges
+suitcase carries
 ```
 
 The default list is only seed data and can be completely replaced by the user.
@@ -543,7 +563,7 @@ Do not build these for MVP:
 - Apple Watch
 - workout statistics
 - exercise categories
-- exercise metadata
+- exercise metadata beyond mute and boost preferences
 - custom durations
 - work/rest configuration
 - streaks
