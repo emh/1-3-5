@@ -7,7 +7,7 @@ struct ExerciseSnacksApp: App {
         WindowGroup {
             RootView()
                 .environment(store)
-                .preferredColorScheme(.dark)
+                .defaultAppStorage(AppTheme.preferences)
                 .tint(Theme.accent)
         }
     }

@@ -3,6 +3,7 @@ import SwiftUI
 enum AppRoute: Hashable { case settings, library }
 
 struct RootView: View {
+    @AppStorage("theme") private var theme: AppTheme = .system
     @Environment(AppStore.self) private var store
     @Environment(\.scenePhase) private var scenePhase
     @State private var confirmRecoveryReset = false
@@ -60,6 +61,7 @@ struct RootView: View {
         .onReceive(NotificationCenter.default.publisher(for: .NSCalendarDayChanged)) { _ in store.refreshHistory() }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in store.refreshHistory() }
         .onReceive(NotificationCenter.default.publisher(for: .NSSystemTimeZoneDidChange)) { _ in store.refreshHistory() }
+        .preferredColorScheme(theme.colorScheme)
     }
 }
 
@@ -95,6 +97,8 @@ extension View {
 }
 
 #if DEBUG
-#Preview("History") { RootView().environment(AppStore.preview()).preferredColorScheme(.dark) }
-#Preview("Empty") { RootView().environment(AppStore.preview(data: .seed)).preferredColorScheme(.dark) }
+#Preview("History · Light") { RootView().environment(AppStore.preview()).preferredColorScheme(.light) }
+#Preview("History · Dark") { RootView().environment(AppStore.preview()).preferredColorScheme(.dark) }
+#Preview("Empty · Light") { RootView().environment(AppStore.preview(data: .seed)).preferredColorScheme(.light) }
+#Preview("Empty · Dark") { RootView().environment(AppStore.preview(data: .seed)).preferredColorScheme(.dark) }
 #endif

@@ -153,10 +153,10 @@ final class SnackFlowTests: XCTestCase {
     }
 
     @MainActor
-    private func waitForLabel(_ label: String, on element: XCUIElement) {
+    private func waitForLabel(_ label: String, on element: XCUIElement, timeout: TimeInterval = 5) {
         let predicate = NSPredicate(format: "label == %@", label)
         expectation(for: predicate, evaluatedWith: element)
-        waitForExpectations(timeout: 5)
+        waitForExpectations(timeout: timeout)
     }
 
     @MainActor
@@ -165,6 +165,36 @@ final class SnackFlowTests: XCTestCase {
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)
+    }
+
+    @MainActor
+    func testPreparationCountdownCentersTimerAndShowsUpcomingExercises() {
+        let app = launch()
+        app.buttons["snack-size-3"].tap()
+        XCTAssertTrue(app.buttons["start-snack"].waitForExistence(timeout: 5))
+        let first = String(app.buttons["reroll-0"].label.dropFirst("Reroll ".count))
+        let second = String(app.buttons["reroll-1"].label.dropFirst("Reroll ".count))
+        let third = String(app.buttons["reroll-2"].label.dropFirst("Reroll ".count))
+        app.buttons["start-snack"].tap()
+        let countdown = app.staticTexts["countdown"]
+        XCTAssertTrue(countdown.waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["active-exercise"].label, "GET READY")
+        XCTAssertEqual(app.staticTexts["next-exercise"].label, first)
+        XCTAssertLessThan(abs(countdown.frame.midY - app.frame.midY), 35)
+        XCTAssertGreaterThan(app.staticTexts["next-exercise"].frame.minY, countdown.frame.maxY)
+        saveScreenshot("preparation-countdown")
+        waitForLabel(first.uppercased(), on: app.staticTexts["active-exercise"], timeout: 12)
+        XCTAssertEqual(app.staticTexts["next-exercise"].label, second)
+        let remaining = Int(countdown.label.split(separator: " ")[0])!
+        XCTAssertGreaterThanOrEqual(remaining, 57)
+        saveScreenshot("centered-timer-next-exercise")
+        app.buttons["skip"].tap()
+        waitForLabel("Exercise 2 of 3", on: app.staticTexts["exercise-position"])
+        XCTAssertEqual(app.staticTexts["next-exercise"].label, third)
+        app.buttons["skip"].tap()
+        waitForLabel("Exercise 3 of 3", on: app.staticTexts["exercise-position"])
+        XCTAssertTrue(app.staticTexts["LAST EXERCISE"].exists)
+        XCTAssertFalse(app.staticTexts["next-exercise"].exists)
     }
 
     @MainActor
@@ -182,6 +212,7 @@ final class SnackFlowTests: XCTestCase {
         saveScreenshot("preview-three-exercises")
         app.buttons["start-snack"].tap()
         XCTAssertTrue(app.buttons["pause-resume"].waitForExistence(timeout: 5))
+        app.buttons["skip"].tap()
         app.buttons["pause-resume"].tap()
         waitForLabel("Resume", on: app.buttons["pause-resume"])
         XCTAssertEqual(app.staticTexts["countdown"].label, "Paused")
@@ -253,6 +284,7 @@ final class SnackFlowTests: XCTestCase {
         app.buttons["snack-size-1"].tap()
         app.buttons["start-snack"].tap()
         XCTAssertTrue(app.buttons["pause-resume"].waitForExistence(timeout: 5))
+        app.buttons["skip"].tap()
         app.buttons["pause-resume"].tap()
         waitForLabel("Resume", on: app.buttons["pause-resume"])
         app.terminate()
@@ -292,6 +324,7 @@ final class SnackFlowTests: XCTestCase {
         app.buttons["start-snack"].tap()
         let countdown = app.staticTexts["countdown"]
         XCTAssertTrue(countdown.waitForExistence(timeout: 5))
+        app.buttons["skip"].tap()
         let before = Int(countdown.label.split(separator: " ")[0])!
         XCUIDevice.shared.press(.home)
         Thread.sleep(forTimeInterval: 3)

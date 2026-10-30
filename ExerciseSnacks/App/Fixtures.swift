@@ -1,5 +1,21 @@
 import Foundation
 
+extension AppTheme {
+    @MainActor static let preferences: UserDefaults = {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-testing") {
+            let name = "ExerciseSnacks-UITests"
+            let defaults = UserDefaults(suiteName: name)!
+            if ProcessInfo.processInfo.arguments.contains("--reset-test-data") {
+                defaults.removePersistentDomain(forName: name)
+            }
+            return defaults
+        }
+        #endif
+        return .standard
+    }()
+}
+
 #if DEBUG
 actor MemoryDataStore: DataPersistence {
     private var data: StoredData

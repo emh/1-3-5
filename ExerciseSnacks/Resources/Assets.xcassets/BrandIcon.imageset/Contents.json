@@ -1,6 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "BrandIcon-light.png",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [{ "appearance" : "luminosity", "value" : "dark" }],
       "filename" : "BrandIcon.png",
       "idiom" : "universal"
     }

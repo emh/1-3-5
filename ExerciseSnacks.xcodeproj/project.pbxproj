@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FDC9844169336F00B3A20C5 /* SnackWidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C13991322710251ECE363 /* SnackWidgetData.swift */; };
 		1EC16422C8357BF95AE7800B /* SessionEngineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D6D6892F3C7E42FAD0F9FD /* SessionEngineTests.swift */; };
 		1EEC69AB3190A6FAC6E4BE8B /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0351E6BDC33E563BB13C7244 /* HistoryTests.swift */; };
 		2470499D80EFA115DBD7BC66 /* LibraryParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD220915CF6964DF4BF3988E /* LibraryParser.swift */; };
 		287CDC9C44C1277F50DF7A3C /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43F22A46577216CA10A0941 /* AppStore.swift */; };
+		2BFFF403E78A2915D32F452C /* TimerSoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607EE5B70C358BD50CF7DB51 /* TimerSoundPlayer.swift */; };
+		2D1C6157B84C0FA5E823AB53 /* WidgetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD04445E93F343770EDF4CA2 /* WidgetTests.swift */; };
 		339735D0D4AA30BF083B3DB8 /* LocalDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDAB3C1344BD955537E29BAB /* LocalDataStore.swift */; };
 		390C99FB4649C5BC94AD3703 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71F350E37F230DC6D61934DE /* SettingsView.swift */; };
 		4A172A82E4F2DA433A90AE28 /* ActiveSnackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E47FC3A8F4ED10A3FB0742A /* ActiveSnackView.swift */; };
@@ -18,12 +21,15 @@
 		6263314F18B7E3D3CDE4D7AC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13E106AC172CD87C34D5ACCA /* Theme.swift */; };
 		769FD981E64EBF4081647C58 /* ExerciseTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 518714B4CE861A1C90BA8985 /* ExerciseTextEditor.swift */; };
 		8C70FDE66178E97D61A0B3B6 /* SnackFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84519992A6597E99DDD1663 /* SnackFlowTests.swift */; };
+		95BF5A8DFF899E72DB43CED8 /* SnackWidgetData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2C13991322710251ECE363 /* SnackWidgetData.swift */; };
 		9CCC3CAEC5732872AA79E9E4 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D004BE6D30752BDECE347D1B /* RootView.swift */; };
+		9D54DF973E75D5600C327B30 /* SnackWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA8CDCD26D0DDC92BA4166E3 /* SnackWidget.swift */; };
 		9DE11A5A1776DE678F0BFE31 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D85A13260DFFDA3AA140B /* HistoryView.swift */; };
 		AA9B33D4121325A8F279B96C /* SessionEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AEDEF597654B6354E919C6 /* SessionEngine.swift */; };
 		B0F17303280AD43F256E25D5 /* PersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643CA05D8132DF9E2D8C3936 /* PersistenceTests.swift */; };
 		BA760C25D76443D1C8D65050 /* SnackSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61FABB2A4F22791AB7481354 /* SnackSession.swift */; };
 		C13AB13072C7AF0DC34DE295 /* Snack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFF31D20FA78A110C288809 /* Snack.swift */; };
+		CCA7AC7D5476D805E7548902 /* ExerciseSnacksWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8A8BD0085D8C097EC21A1F3B /* ExerciseSnacksWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		CF4C75158008C607EC1D9E73 /* ExercisePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA8BCC67B7E4CEBBBA9949E /* ExercisePreferences.swift */; };
 		D006E4964AA21BA6A1A2DAC3 /* LibraryEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80E54702EDF27B9C1363F8B /* LibraryEditorView.swift */; };
 		D37193B9BD71594011EDCA0B /* AppStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80A03AE5AB4EBAADF6E1D101 /* AppStoreTests.swift */; };
@@ -50,20 +56,45 @@
 			remoteGlobalIDString = 37BC27CCFF751A39E2D345A3;
 			remoteInfo = ExerciseSnacks;
 		};
+		9E19096B44F1DD8A192AC3F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B86021DDBCDF0D1379C4B78D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B431091DCEC12630E11BA590;
+			remoteInfo = ExerciseSnacksWidget;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		9461313B1241C05175B74254 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CCA7AC7D5476D805E7548902 /* ExerciseSnacksWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0351E6BDC33E563BB13C7244 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
+		0C2C13991322710251ECE363 /* SnackWidgetData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackWidgetData.swift; sourceTree = "<group>"; };
 		1198CA8B8005182B6AECB868 /* SnackPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackPreviewView.swift; sourceTree = "<group>"; };
 		13E106AC172CD87C34D5ACCA /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		40FE9C02231ADF335339466E /* ExerciseSnacks.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExerciseSnacks.entitlements; sourceTree = "<group>"; };
 		4A2D9DF8586AFBA9A9155602 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		518714B4CE861A1C90BA8985 /* ExerciseTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseTextEditor.swift; sourceTree = "<group>"; };
+		607EE5B70C358BD50CF7DB51 /* TimerSoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSoundPlayer.swift; sourceTree = "<group>"; };
 		61FABB2A4F22791AB7481354 /* SnackSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackSession.swift; sourceTree = "<group>"; };
 		643CA05D8132DF9E2D8C3936 /* PersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceTests.swift; sourceTree = "<group>"; };
 		714DF3E83EAAA18B1F5CEA2C /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
 		71F350E37F230DC6D61934DE /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		7BFF31D20FA78A110C288809 /* Snack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snack.swift; sourceTree = "<group>"; };
 		80A03AE5AB4EBAADF6E1D101 /* AppStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreTests.swift; sourceTree = "<group>"; };
+		8A8BD0085D8C097EC21A1F3B /* ExerciseSnacksWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = ExerciseSnacksWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BE48D6481B49A54C3ECC8B8 /* Fixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fixtures.swift; sourceTree = "<group>"; };
 		90FC37A06A2682B735551534 /* ExerciseSnacksApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSnacksApp.swift; sourceTree = "<group>"; };
 		9B638A6D3C865B36E709E181 /* ExerciseSnacksUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExerciseSnacksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,11 +106,15 @@
 		BBA8BCC67B7E4CEBBBA9949E /* ExercisePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisePreferences.swift; sourceTree = "<group>"; };
 		BD220915CF6964DF4BF3988E /* LibraryParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryParser.swift; sourceTree = "<group>"; };
 		BDAB3C1344BD955537E29BAB /* LocalDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalDataStore.swift; sourceTree = "<group>"; };
+		BDB75BF036CD18CE6E80E99D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C43F22A46577216CA10A0941 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		D004BE6D30752BDECE347D1B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D03F51BFDFEC042F1ADDDC0A /* ExerciseSnacksTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ExerciseSnacksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD04445E93F343770EDF4CA2 /* WidgetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetTests.swift; sourceTree = "<group>"; };
 		E29286B1BE652AED0A43A17A /* HistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistorySection.swift; sourceTree = "<group>"; };
+		EA8CDCD26D0DDC92BA4166E3 /* SnackWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackWidget.swift; sourceTree = "<group>"; };
 		ED90310BE5B2E343061C0D2D /* ExerciseSnacks.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ExerciseSnacks.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE395681AAB2BC2AFC4DD879 /* ExerciseSnacksWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ExerciseSnacksWidget.entitlements; sourceTree = "<group>"; };
 		F8029CF63440A88D0FBD2764 /* StoredData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoredData.swift; sourceTree = "<group>"; };
 		F84519992A6597E99DDD1663 /* SnackFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackFlowTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +138,7 @@
 				ED90310BE5B2E343061C0D2D /* ExerciseSnacks.app */,
 				D03F51BFDFEC042F1ADDDC0A /* ExerciseSnacksTests.xctest */,
 				9B638A6D3C865B36E709E181 /* ExerciseSnacksUITests.xctest */,
+				8A8BD0085D8C097EC21A1F3B /* ExerciseSnacksWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,6 +151,16 @@
 				71F350E37F230DC6D61934DE /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		3B3B5CEC04656F8BB28BBFFD /* ExerciseSnacksWidget */ = {
+			isa = PBXGroup;
+			children = (
+				EE395681AAB2BC2AFC4DD879 /* ExerciseSnacksWidget.entitlements */,
+				BDB75BF036CD18CE6E80E99D /* Info.plist */,
+				EA8CDCD26D0DDC92BA4166E3 /* SnackWidget.swift */,
+			);
+			path = ExerciseSnacksWidget;
 			sourceTree = "<group>";
 		};
 		3C3DB1C48B3C06CF7972EC17 /* Models */ = {
@@ -135,6 +181,7 @@
 				714DF3E83EAAA18B1F5CEA2C /* LibraryTests.swift */,
 				643CA05D8132DF9E2D8C3936 /* PersistenceTests.swift */,
 				B9D6D6892F3C7E42FAD0F9FD /* SessionEngineTests.swift */,
+				DD04445E93F343770EDF4CA2 /* WidgetTests.swift */,
 			);
 			path = ExerciseSnacksTests;
 			sourceTree = "<group>";
@@ -148,6 +195,14 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		718CB3A3E22F6C4809CA0CFD /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0C2C13991322710251ECE363 /* SnackWidgetData.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		8417A90F2633E7DC246082C0 /* Snack */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +211,7 @@
 				B0AEDEF597654B6354E919C6 /* SessionEngine.swift */,
 				1198CA8B8005182B6AECB868 /* SnackPreviewView.swift */,
 				61FABB2A4F22791AB7481354 /* SnackSession.swift */,
+				607EE5B70C358BD50CF7DB51 /* TimerSoundPlayer.swift */,
 			);
 			path = Snack;
 			sourceTree = "<group>";
@@ -166,6 +222,8 @@
 				89CAE45971C5D359B07E5046 /* ExerciseSnacks */,
 				40DD83EBE48FF4BFE88A968F /* ExerciseSnacksTests */,
 				F5A8F5B4E3E43E0720F99DA7 /* ExerciseSnacksUITests */,
+				3B3B5CEC04656F8BB28BBFFD /* ExerciseSnacksWidget */,
+				718CB3A3E22F6C4809CA0CFD /* Shared */,
 				1ECB07314EC7A84B978BAD51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -173,6 +231,7 @@
 		89CAE45971C5D359B07E5046 /* ExerciseSnacks */ = {
 			isa = PBXGroup;
 			children = (
+				40FE9C02231ADF335339466E /* ExerciseSnacks.entitlements */,
 				131612378711B4C3D1025FE6 /* App */,
 				E4A9766534A232CB2BB3F533 /* Data */,
 				8B3AA10B3794CC9C915B038F /* Features */,
@@ -243,10 +302,12 @@
 			buildPhases = (
 				287C8A306779C9515A4ADE95 /* Sources */,
 				DD80E4FCF041FF5F3E5640FB /* Resources */,
+				9461313B1241C05175B74254 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CBCEFB3533697DEEB0563B7D /* PBXTargetDependency */,
 			);
 			name = ExerciseSnacks;
 			packageProductDependencies = (
@@ -273,6 +334,23 @@
 			productReference = D03F51BFDFEC042F1ADDDC0A /* ExerciseSnacksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		B431091DCEC12630E11BA590 /* ExerciseSnacksWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 979DDA1A67A0A532DBF5A6B0 /* Build configuration list for PBXNativeTarget "ExerciseSnacksWidget" */;
+			buildPhases = (
+				40AFAA602291449875B50908 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ExerciseSnacksWidget;
+			packageProductDependencies = (
+			);
+			productName = ExerciseSnacksWidget;
+			productReference = 8A8BD0085D8C097EC21A1F3B /* ExerciseSnacksWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -287,9 +365,14 @@
 						TestTargetID = 37BC27CCFF751A39E2D345A3;
 					};
 					37BC27CCFF751A39E2D345A3 = {
+						DevelopmentTeam = FMA5NVPU24;
 						ProvisioningStyle = Automatic;
 					};
 					3E04B1365337C4C41D0E408D = {
+						ProvisioningStyle = Automatic;
+					};
+					B431091DCEC12630E11BA590 = {
+						DevelopmentTeam = FMA5NVPU24;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -311,6 +394,7 @@
 				37BC27CCFF751A39E2D345A3 /* ExerciseSnacks */,
 				3E04B1365337C4C41D0E408D /* ExerciseSnacksTests */,
 				1EFF70AFDE2FDDF562687754 /* ExerciseSnacksUITests */,
+				B431091DCEC12630E11BA590 /* ExerciseSnacksWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -356,8 +440,19 @@
 				C13AB13072C7AF0DC34DE295 /* Snack.swift in Sources */,
 				E720F4CF1DA8A46B407FFA44 /* SnackPreviewView.swift in Sources */,
 				BA760C25D76443D1C8D65050 /* SnackSession.swift in Sources */,
+				95BF5A8DFF899E72DB43CED8 /* SnackWidgetData.swift in Sources */,
 				F9870E3664D7E28CA07F4D19 /* StoredData.swift in Sources */,
 				6263314F18B7E3D3CDE4D7AC /* Theme.swift in Sources */,
+				2BFFF403E78A2915D32F452C /* TimerSoundPlayer.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		40AFAA602291449875B50908 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9D54DF973E75D5600C327B30 /* SnackWidget.swift in Sources */,
+				0FDC9844169336F00B3A20C5 /* SnackWidgetData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +465,7 @@
 				DE339C5B34DD825F6E0F0223 /* LibraryTests.swift in Sources */,
 				B0F17303280AD43F256E25D5 /* PersistenceTests.swift in Sources */,
 				1EC16422C8357BF95AE7800B /* SessionEngineTests.swift in Sources */,
+				2D1C6157B84C0FA5E823AB53 /* WidgetTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +481,11 @@
 			isa = PBXTargetDependency;
 			target = 37BC27CCFF751A39E2D345A3 /* ExerciseSnacks */;
 			targetProxy = 6F00A0064280C47F3213EE61 /* PBXContainerItemProxy */;
+		};
+		CBCEFB3533697DEEB0563B7D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B431091DCEC12630E11BA590 /* ExerciseSnacksWidget */;
+			targetProxy = 9E19096B44F1DD8A192AC3F2 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -477,13 +578,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ExerciseSnacks/ExerciseSnacks.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = FMA5NVPU24;
 				INFOPLIST_KEY_CFBundleDisplayName = "Exercise Snacks";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -557,6 +659,25 @@
 			};
 			name = Release;
 		};
+		6687ECB1D62B3E51F34331C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ExerciseSnacksWidget/ExerciseSnacksWidget.entitlements;
+				DEVELOPMENT_TEAM = FMA5NVPU24;
+				INFOPLIST_FILE = ExerciseSnacksWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.ExerciseSnacks.Widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		782C133686191A79258D408A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -572,6 +693,25 @@
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ExerciseSnacks.app/ExerciseSnacks";
 			};
 			name = Release;
+		};
+		C686630F19405CC85211480B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = ExerciseSnacksWidget/ExerciseSnacksWidget.entitlements;
+				DEVELOPMENT_TEAM = FMA5NVPU24;
+				INFOPLIST_FILE = ExerciseSnacksWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = local.ExerciseSnacks.Widget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
 		};
 		C7705A1152E82EE78A8F672A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -609,13 +749,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = ExerciseSnacks/ExerciseSnacks.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = FMA5NVPU24;
 				INFOPLIST_KEY_CFBundleDisplayName = "Exercise Snacks";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -636,6 +777,15 @@
 			buildConfigurations = (
 				C7705A1152E82EE78A8F672A /* Debug */,
 				CFCF57E53AD17219E301D5D6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		979DDA1A67A0A532DBF5A6B0 /* Build configuration list for PBXNativeTarget "ExerciseSnacksWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C686630F19405CC85211480B /* Debug */,
+				6687ECB1D62B3E51F34331C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

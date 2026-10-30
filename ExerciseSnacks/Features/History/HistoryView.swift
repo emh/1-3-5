@@ -124,7 +124,6 @@ private struct SnackRow: View {
     let snack: Snack
     @Environment(\.dynamicTypeSize) private var typeSize
     @ScaledMetric(relativeTo: .caption) private var timeWidth = 64.0
-    @ScaledMetric(relativeTo: .caption) private var durationWidth = 36.0
 
     private var time: String {
         snack.completedAt.formatted(Date.FormatStyle.dateTime.hour(.twoDigits(amPM: .omitted)).minute(.twoDigits).locale(Locale(identifier: "en_GB")))
@@ -134,13 +133,12 @@ private struct SnackRow: View {
         Group {
             if typeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: 10) {
-                    HStack(spacing: 20) { Text(time); Text(snack.durationLabel) }.foregroundStyle(Theme.secondary)
+                    Text(time).foregroundStyle(Theme.secondary)
                     names
                 }
             } else {
                 HStack(alignment: .top, spacing: 12) {
                     Text(time).frame(width: timeWidth, alignment: .leading)
-                    Text(snack.durationLabel).frame(width: durationWidth, alignment: .leading)
                     names.frame(maxWidth: .infinity, alignment: .leading)
                 }
             }

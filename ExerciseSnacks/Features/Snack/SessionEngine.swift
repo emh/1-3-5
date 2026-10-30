@@ -18,7 +18,11 @@ enum SessionClock {
 }
 
 enum SessionPhase: String, Codable, Sendable {
-    case ready, running, paused, finishing, cancelled
+    case ready, countingDown, countdownPaused, running, paused, finishing, cancelled
+
+    var isCountingDown: Bool { self == .countingDown || self == .countdownPaused }
+    var isPaused: Bool { self == .paused || self == .countdownPaused }
+    var isTicking: Bool { self == .running || self == .countingDown }
 }
 
 struct SessionCheckpoint: Codable, Equatable, Sendable {
@@ -39,7 +43,7 @@ struct SessionEngine: Equatable, Sendable {
     private(set) var revision = 0
     private(set) var completedAt: Date?
     private var deadline: TimeInterval?
-    private var frozenRemaining: TimeInterval = 60
+    private var frozenRemaining: TimeInterval = 10
 
     init(id: UUID = UUID(), exercises: [String]) {
         self.id = id
@@ -60,54 +64,67 @@ struct SessionEngine: Equatable, Sendable {
 
     var exercise: String { exercises[index] }
 
+    var nextExercise: String? {
+        let nextIndex = phase.isCountingDown || phase == .ready ? index : index + 1
+        return exercises.indices.contains(nextIndex) ? exercises[nextIndex] : nil
+    }
+
     func remaining(at time: SessionTime) -> TimeInterval {
         switch phase {
-        case .running: max(0, (deadline ?? time.elapsed) - time.elapsed)
-        case .ready, .paused: frozenRemaining
+        case .countingDown, .running: max(0, (deadline ?? time.elapsed) - time.elapsed)
+        case .ready, .countdownPaused, .paused: frozenRemaining
         case .finishing, .cancelled: 0
         }
     }
 
     mutating func start(at time: SessionTime) {
         guard phase == .ready else { return }
-        phase = .running
-        deadline = time.elapsed + 60
+        phase = .countingDown
+        deadline = time.elapsed + 10
         revision += 1
     }
 
     mutating func reconcile(at time: SessionTime) {
-        while phase == .running, let end = deadline, time.elapsed >= end {
-            advance(at: end, completionDate: time.date.addingTimeInterval(end - time.elapsed))
+        while phase.isTicking, let end = deadline, time.elapsed >= end {
+            if phase == .countingDown {
+                beginExercises(at: end)
+            } else {
+                advance(at: end, completionDate: time.date.addingTimeInterval(end - time.elapsed))
+            }
         }
     }
 
     mutating func pause(at time: SessionTime) {
         reconcile(at: time)
-        guard phase == .running else { return }
+        guard phase.isTicking else { return }
         frozenRemaining = remaining(at: time)
         deadline = nil
-        phase = .paused
+        phase = phase == .countingDown ? .countdownPaused : .paused
         revision += 1
     }
 
     mutating func resume(at time: SessionTime) {
-        guard phase == .paused else { return }
+        guard phase.isPaused else { return }
         deadline = time.elapsed + frozenRemaining
-        phase = .running
+        phase = phase == .countdownPaused ? .countingDown : .running
         revision += 1
     }
 
     mutating func togglePause(expectedRevision: Int, at time: SessionTime) {
         guard revision == expectedRevision else { return }
-        if phase == .paused { resume(at: time) } else { pause(at: time) }
+        if phase.isPaused { resume(at: time) } else { pause(at: time) }
     }
 
     mutating func skip(expectedRevision: Int, at time: SessionTime) {
         guard revision == expectedRevision else { return }
         reconcile(at: time)
         // A deadline that won this race already advanced this exercise.
-        guard revision == expectedRevision, phase == .running || phase == .paused else { return }
-        advance(at: time.elapsed, completionDate: time.date)
+        guard revision == expectedRevision, phase.isTicking || phase.isPaused else { return }
+        if phase.isCountingDown {
+            beginExercises(at: time.elapsed)
+        } else {
+            advance(at: time.elapsed, completionDate: time.date)
+        }
     }
 
     mutating func cancel() {
@@ -118,12 +135,19 @@ struct SessionEngine: Equatable, Sendable {
     }
 
     func checkpoint(at time: SessionTime) -> SessionCheckpoint? {
-        guard phase == .running || phase == .paused else { return nil }
+        guard phase.isTicking || phase.isPaused else { return nil }
         return SessionCheckpoint(
             id: id, exercises: exercises, index: index, phase: phase,
             deadline: deadline.map { time.date.addingTimeInterval($0 - time.elapsed) },
             remaining: remaining(at: time)
         )
+    }
+
+    private mutating func beginExercises(at time: TimeInterval) {
+        phase = phase.isPaused ? .paused : .running
+        frozenRemaining = 60
+        deadline = phase.isTicking ? time + 60 : nil
+        revision += 1
     }
 
     private mutating func advance(at end: TimeInterval, completionDate: Date) {
@@ -140,4 +164,3 @@ struct SessionEngine: Equatable, Sendable {
         }
     }
 }
-

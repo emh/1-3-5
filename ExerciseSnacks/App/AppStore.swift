@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import WidgetKit
 
 struct StorageIssue: Identifiable {
     let id = UUID()
@@ -16,6 +17,7 @@ final class AppStore {
     private(set) var isReplacing = false
     private(set) var session: SnackSession?
     private(set) var pendingWrites = 0
+    var widgetUpdateError: String?
     var loadError: String?
     var storageIssue: StorageIssue?
     var recentSnackID: UUID?
@@ -43,6 +45,7 @@ final class AppStore {
             refreshExercises()
             refreshHistory()
             isLoaded = true
+            publishWidget(data)
             loadError = nil
             if let checkpoint = data.activeSession {
                 let now = SessionClock.now()
@@ -51,6 +54,25 @@ final class AppStore {
             }
         } catch {
             loadError = error.localizedDescription
+        }
+    }
+
+    func setSnackSchedule(_ schedule: SnackSchedule) {
+        guard isLoaded, !isReplacing, schedule.isValid else { return }
+        data.snackSchedule = schedule
+        persist()
+    }
+
+    private func publishWidget(_ data: StoredData) {
+        guard let local = persistence as? LocalDataStore, local.fileURL == LocalDataStore.defaultURL else { return }
+        let snapshot = data.widgetSnapshot
+        guard SnackWidgetStorage.read() != snapshot else { return }
+        do {
+            try SnackWidgetStorage.write(snapshot)
+            widgetUpdateError = nil
+            WidgetCenter.shared.reloadTimelines(ofKind: SnackWidgetStorage.kind)
+        } catch {
+            widgetUpdateError = "Your snacks are saved, but the widget could not update. \(error.localizedDescription)"
         }
     }
 
@@ -139,11 +161,11 @@ final class AppStore {
         guard let session, !session.isConfirmingCancellation else { return }
         let now = SessionClock.now()
         session.update(at: now) { $0.reconcile(at: now) }
-        guard session.engine.phase == .running || session.engine.phase == .paused else {
+        guard session.engine.phase.isTicking || session.engine.phase.isPaused else {
             sessionChanged(at: now)
             return
         }
-        session.resumeAfterConfirmation = session.engine.phase == .running
+        session.resumeAfterConfirmation = session.engine.phase.isTicking
         session.update(at: now) { $0.pause(at: now) }
         session.isConfirmingCancellation = true
         sessionChanged(at: now)
@@ -169,7 +191,7 @@ final class AppStore {
 
     func backgrounded() {
         flushLibrary()
-        guard let session, session.engine.phase == .running || session.engine.phase == .paused else { return }
+        guard let session, session.engine.phase.isTicking || session.engine.phase.isPaused else { return }
         let now = SessionClock.now()
         session.update(at: now) { $0.reconcile(at: now) }
         sessionChanged(at: now)
@@ -192,6 +214,7 @@ final class AppStore {
         await waitForWrites()
         try await persistence.save(replacement)
         data = replacement
+        publishWidget(replacement)
         refreshExercises()
         session = nil
         recentSnackID = nil
@@ -213,7 +236,7 @@ final class AppStore {
         guard let session else { return }
         switch session.engine.phase {
         case .ready: return
-        case .running, .paused:
+        case .countingDown, .countdownPaused, .running, .paused:
             data.activeSession = session.engine.checkpoint(at: time)
         case .finishing:
             guard !session.completionRequested, let completedAt = session.engine.completedAt else { return }
@@ -242,6 +265,7 @@ final class AppStore {
             do {
                 try await persistence.save(snapshot)
                 savedRevision = revision
+                publishWidget(snapshot)
                 if revision == writeRevision {
                     storageIssue = nil
                     if let session, snapshot.activeSession == nil {

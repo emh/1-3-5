@@ -17,19 +17,46 @@ targets:
   ExerciseSnacks:
     type: application
     platform: iOS
-    sources: [ExerciseSnacks]
+    sources: [ExerciseSnacks, Shared]
+    entitlements:
+      path: ExerciseSnacks/ExerciseSnacks.entitlements
+      properties:
+        com.apple.security.application-groups: [group.local.ExerciseSnacks]
+    dependencies:
+      - target: ExerciseSnacksWidget
+        embed: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: local.ExerciseSnacks
+        DEVELOPMENT_TEAM: FMA5NVPU24
         INFOPLIST_KEY_CFBundleDisplayName: Exercise Snacks
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
-        INFOPLIST_KEY_UIUserInterfaceStyle: Dark
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
         SUPPORTS_MACCATALYST: NO
         SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+  ExerciseSnacksWidget:
+    type: app-extension
+    platform: iOS
+    sources: [ExerciseSnacksWidget, Shared]
+    info:
+      path: ExerciseSnacksWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Snack rhythm
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: ExerciseSnacksWidget/ExerciseSnacksWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.local.ExerciseSnacks]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.ExerciseSnacks.Widget
+        DEVELOPMENT_TEAM: FMA5NVPU24
+        SKIP_INSTALL: YES
+        APPLICATION_EXTENSION_API_ONLY: YES
   ExerciseSnacksTests:
     type: bundle.unit-test
     platform: iOS
@@ -51,4 +78,3 @@ schemes:
       targets:
         - ExerciseSnacksTests
         - ExerciseSnacksUITests
-

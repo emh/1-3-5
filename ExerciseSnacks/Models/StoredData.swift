@@ -6,6 +6,15 @@ struct StoredData: Codable, Equatable, Sendable {
     var snacks: [Snack]
     var activeSession: SessionCheckpoint?
     var exercisePreferences: [String: ExercisePreferences] = [:]
+    var snackSchedule = SnackSchedule()
+
+    /// A saved record is a set; each exercise in that set counts as one snack.
+    var widgetSnapshot: SnackWidgetSnapshot {
+        SnackWidgetSnapshot(
+            completions: snacks.flatMap { Array(repeating: $0.completedAt, count: $0.exercises.count) },
+            schedule: snackSchedule
+        )
+    }
 
     static let seed = StoredData(libraryText: SeedLibrary.text, snacks: [])
 }
@@ -18,6 +27,7 @@ extension StoredData {
         snacks = try values.decode([Snack].self, forKey: .snacks)
         activeSession = try values.decodeIfPresent(SessionCheckpoint.self, forKey: .activeSession)
         exercisePreferences = try values.decodeIfPresent([String: ExercisePreferences].self, forKey: .exercisePreferences) ?? [:]
+        snackSchedule = try values.decodeIfPresent(SnackSchedule.self, forKey: .snackSchedule) ?? SnackSchedule()
     }
 }
 
@@ -26,11 +36,13 @@ struct ExportPayload: Codable, Equatable, Sendable {
     let library: [String]
     let snacks: [Snack]
     let exercisePreferences: [String: ExercisePreferences]
+    let snackSchedule: SnackSchedule
 
     init(data: StoredData) {
         library = LibraryParser.parse(data.libraryText)
         snacks = data.snacks
         exercisePreferences = data.exercisePreferences
+        snackSchedule = data.snackSchedule
     }
 
     init(from decoder: Decoder) throws {
@@ -39,26 +51,30 @@ struct ExportPayload: Codable, Equatable, Sendable {
         library = try values.decode([String].self, forKey: .library)
         snacks = try values.decode([Snack].self, forKey: .snacks)
         exercisePreferences = try values.decodeIfPresent([String: ExercisePreferences].self, forKey: .exercisePreferences) ?? [:]
+        snackSchedule = try values.decodeIfPresent(SnackSchedule.self, forKey: .snackSchedule) ?? SnackSchedule()
     }
 
     func importedData() throws -> StoredData {
         guard version == 1 else { throw DataError.unsupportedVersion }
+        guard snackSchedule.isValid else { throw DataError.invalidSchedule }
         try DataValidation.names(library, allowDuplicates: true)
         try DataValidation.snacks(snacks)
         try DataValidation.preferences(exercisePreferences, library: library)
         return StoredData(
             libraryText: LibraryParser.parse(library.joined(separator: "\n")).joined(separator: "\n"),
             snacks: snacks.sorted { $0.completedAt > $1.completedAt },
-            exercisePreferences: exercisePreferences
+            exercisePreferences: exercisePreferences,
+            snackSchedule: snackSchedule
         )
     }
 }
 
 enum DataError: LocalizedError {
-    case unsupportedVersion, invalidExercises, invalidHistory, invalidSession, invalidPreferences
+    case unsupportedVersion, invalidExercises, invalidHistory, invalidSession, invalidPreferences, invalidSchedule
 
     var errorDescription: String? {
         switch self {
+        case .invalidSchedule: "The snack schedule contains invalid values."
         case .unsupportedVersion: "This file uses an unsupported data version."
         case .invalidExercises: "Exercise names must be non-empty, single lines of text."
         case .invalidHistory: "This file contains invalid or duplicate snack records."
@@ -96,6 +112,7 @@ enum DataValidation {
     }
 
     static func stored(_ data: StoredData) throws {
+        guard data.snackSchedule.isValid else { throw DataError.invalidSchedule }
         guard data.version == 1 else { throw DataError.unsupportedVersion }
         try preferences(data.exercisePreferences, library: LibraryParser.parse(data.libraryText))
         try snacks(data.snacks)
@@ -104,8 +121,9 @@ enum DataValidation {
             guard SnackGenerator.sizes.contains(session.exercises.count),
                   session.exercises.indices.contains(session.index),
                   session.remaining.isFinite, (0...60).contains(session.remaining),
-                  session.phase == .running || session.phase == .paused,
-                  (session.phase == .running) == (session.deadline != nil),
+                  session.phase.isTicking || session.phase.isPaused,
+                  session.phase.isTicking == (session.deadline != nil),
+                  !session.phase.isCountingDown || (session.index == 0 && session.remaining <= 10),
                   !data.snacks.contains(where: { $0.id == session.id })
             else { throw DataError.invalidSession }
         }

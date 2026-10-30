@@ -63,6 +63,8 @@ struct AppStoreTests {
         store.startOrReconcile()
         await store.waitForWrites()
         let session = try #require(store.session)
+        store.skip(expectedRevision: session.engine.revision) // Skip preparation, not the exercise.
+        await store.waitForWrites()
         await disk.failNextSave()
         store.skip(expectedRevision: session.engine.revision)
         await store.waitForWrites()
@@ -91,21 +93,23 @@ struct AppStoreTests {
         #expect(store.data == .seed)
     }
 
-    @Test func cancelAndKeepRestorePriorPauseState() async throws {
+    @Test(arguments: [false, true])
+    func cancelAndKeepRestorePriorPauseState(duringPreparation: Bool) async throws {
         let disk = ControlledStorage()
         let store = AppStore(persistence: disk)
         await store.load()
         store.prepareSession(exercises: ["pushups"])
         store.startOrReconcile()
         let session = try #require(store.session)
+        if !duringPreparation { store.skip(expectedRevision: session.engine.revision) }
         store.beginCancellation()
-        #expect(session.engine.phase == .paused)
+        #expect(session.engine.phase == (duringPreparation ? .countdownPaused : .paused))
         store.keepSession()
-        #expect(session.engine.phase == .running)
+        #expect(session.engine.phase == (duringPreparation ? .countingDown : .running))
         store.togglePause(expectedRevision: session.engine.revision)
         store.beginCancellation()
         store.keepSession()
-        #expect(session.engine.phase == .paused)
+        #expect(session.engine.phase == (duringPreparation ? .countdownPaused : .paused))
         store.beginCancellation()
         store.cancelSession()
         await store.waitForWrites()
